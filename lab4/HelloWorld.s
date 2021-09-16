@@ -33,6 +33,7 @@ _start:
  mov X0, #0 // Use 0 return code
  mov X8, #93 // Service code 93 terminates
  svc 0 // Call Linux to terminate
+ 
 .data
 szMsg1: .asciz "The sun did not shine."
 szMsg2: .asciz "It was too wet to play."
