@@ -20,7 +20,7 @@ dbX:    .word    0
 dbY:    .word    0
 dbSum:  .word    0
 
-    .global_start       // Provide program starting address to linker
+    .global _start       // Provide program starting address to linker
     .text
 _start:
 
@@ -135,7 +135,7 @@ ascint64:
 
     mov X5, X0          // Copy X0 (length) into X5
     cmp X0, #0          // if (strlenth(*X0) == 0)
-    beq botloop         // exit loop
+    beq botLoop         // exit loop
     mov X0, X8          // Restoring X0 to point to my cString
 
     // === Power math for base 10 ============
@@ -157,7 +157,7 @@ topLoop:
     mul X2, X2, X4      // result of X4 ^ X2
     sub X5, X5, #1
     cmp X5, #0          // Compare X5 == 0 
-    beq botloop         // if (X5 ==0)
+    beq botLoop         // if (X5 ==0)
     b   topLoop         // jump to botLoop
 
 botLoop:
@@ -191,4 +191,4 @@ botLoop2:
     mov X0, X2          // X0 - length of the cString
     br  LR              // Return
     
-    .end 
+    .end
