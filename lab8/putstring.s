@@ -6,7 +6,8 @@
 * SECTION    : M-W 11:30p - 1:50p
 * DUE DATE   : 9/15/2021
 *_______________________________________________________________________________________
-* Program function: Display to the terminal the result of adding two 64-bit numbers.
+* Program function: Display to the terminal a string stored in data who's size is determined
+* by a strlength subroutine.
 ****************************************************************************************/
 
     .data
