@@ -80,89 +80,32 @@ _start:
     // subtract one from the other, if less than 0, then store the larger number in R0
     // else if greater than 0, store that value 
 
-    SUB X15, X14, X13  // SUB X16 = Y - X
-    CMP X15, #0         // if difference > 0
-    b.gt yGreater       // store Y
-    CMP X15, #0         // if difference < 0
-    b.lt xGreater       // store X
+  //  SUBS X15, X14, X13  // SUB X16 = Y - X
+   // CMP X15, #0         // if difference > 0
+   // bgt yGreater       // store Y
+
+    CMP X13, X14         // if difference < 0
+    blt yGreater       // or store Y 
+    // else store x 
+
+    MOV X0, X13
 
 exit:
     mov X0, #0           // Use 0 return code
     mov X8, #93          // Service command code 93 terminates the program
     svc 0                // Call Linux to terminate the program 
+ 
 //=============================================================================================================
-//=============================================================================================================
-    /****************************************************************************************
-    * X is greater
-    ****************************************************************************************/
-xGreater:
-    // PRESERVE REGISTERS AS PER AAPCS
-    str X19, [SP, #-16]! // PUSH
-    str X20, [SP, #-16]!
-    str X21, [SP, #-16]!
-    str X22, [SP, #-16]!
-    str X23, [SP, #-16]!
-    str X24, [SP, #-16]!
-    str X25, [SP, #-16]!
-    str X26, [SP, #-16]!
-    str X27, [SP, #-16]!
-    str X28, [SP, #-16]!
-    str X29, [SP, #-16]!
-    str X30, [SP, #-16]! // PUSH LR 
-
-    MOV X0, X13
-    b exit
-
-    // POPPED IN REVERSE ORDER (LIFO)
-    ldr X30, [SP], #16  // POP
-    ldr X29, [SP], #16  // POP
-    ldr X28, [SP], #16  // POP
-    ldr X27, [SP], #16  // POP
-    ldr X26, [SP], #16  // POP
-    ldr X25, [SP], #16  // POP
-    ldr X24, [SP], #16  // POP
-    ldr X23, [SP], #16  // POP
-    ldr X22, [SP], #16  // POP
-    ldr X21, [SP], #16  // POP
-    ldr X20, [SP], #16  // POP
-    ldr X19, [SP], #16  // POP
 
     /****************************************************************************************
     * Y is greater
     ****************************************************************************************/
 yGreater:
-    // PRESERVE REGISTERS AS PER AAPCS
-    str X19, [SP, #-16]! // PUSH
-    str X20, [SP, #-16]!
-    str X21, [SP, #-16]!
-    str X22, [SP, #-16]!
-    str X23, [SP, #-16]!
-    str X24, [SP, #-16]!
-    str X25, [SP, #-16]!
-    str X26, [SP, #-16]!
-    str X27, [SP, #-16]!
-    str X28, [SP, #-16]!
-    str X29, [SP, #-16]!
-    str X30, [SP, #-16]! // PUSH LR 
+
 
     MOV X0, X14
+
     b exit
-
-    // POPPED IN REVERSE ORDER (LIFO)
-    ldr X30, [SP], #16  // POP
-    ldr X29, [SP], #16  // POP
-    ldr X28, [SP], #16  // POP
-    ldr X27, [SP], #16  // POP
-    ldr X26, [SP], #16  // POP
-    ldr X25, [SP], #16  // POP
-    ldr X24, [SP], #16  // POP
-    ldr X23, [SP], #16  // POP
-    ldr X22, [SP], #16  // POP
-    ldr X21, [SP], #16  // POP
-    ldr X20, [SP], #16  // POP
-    ldr X19, [SP], #16  // POP
-
-
     /****************************************************************************************
     * SUBROUTINE strlength:
     * _______________________________________________________________________________________
