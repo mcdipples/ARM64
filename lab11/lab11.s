@@ -16,8 +16,8 @@ Write a for loop (do not use the for directive)s to copy the data from iSrcArray
 ****************************************************************************************/
 
         .data
-iSrcArray:       .word       0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15      // 00000000004100f8
-iDestArray:      .skip       64                                         // 0000000000410138
+iSrcArray:       .word       0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15      // 0000000000410100
+iDestArray:      .skip       64                                         // 0000000000410140
 
         .global _start
         .text
@@ -45,7 +45,7 @@ loop:
 
     MOV X5, X1              // move iSrcArray[i](X1) into X5
 
-    STR W5, [X2]            // stores X5 into whatever X2 points to (iDestArray[i])  
+    STRB W5, [X2]            // stores X5 into whatever X2 points to (iDestArray[i])  
 
     ADD X0, X0, #4          // increment index by 1 
     ADD X2, X2, #4          // increment index by 1 
