@@ -1,46 +1,4 @@
 /****************************************************************************************
-* AUTHOR     : Sierra Martin
-* STUDENT ID : 1130942
-* HW NAME    : Lab 8
-* CLASS      : CS3B
-* SECTION    : M-W 11:30p - 1:50p
-****************************************************************************************/
-
-    .data
-szName:      .asciz      "Sierra Martin"
-chCr:        .byte       10
-
-    .global _start
-    .text
-    /****************************************************************************************
-    * SUBROUTINE strlength:
-    * _______________________________________________________________________________________
-    * Will read a string of characters terminated by a null, reads and counts til it hits a null
-    * _______________________________________________________________________________________
-    * X0:Points to the first byte of a cString
-    * LR: contains the return address
-    * All registers are preserved except X0
-    * _______________________________________________________________________________________
-    * Returned register contents:
-    * X0: length of the cString excluding the null character
-    * All registers preserved except X0
-    ****************************************************************************************/
-strlength:
-    // We need a do-while
-    mov X7, X0          // Point to the first digit (leftmost) of cString
-    mov X2, #0          // Counter
-
-topLoop2:
-    ldrb W1, [X7], #1   // Indirect addressing X1 = *X0
-    cmp  W1, #0         // if (W1 == NULL CHARACTER) 
-    beq  botloop2       // jump to the bottom of the subroutine
-    add  X2, X2, #1     // increment counter
-    b    topLoop2       // jump back up to the top of the loop
-
-botloop2:
-    mov  X0, X2         // X0 = Length of the cString
-    br   LR             // Return 
-    /****************************************************************************************
     * SUBROUTINE putstring:
     * _______________________________________________________________________________________
     * Provided a pointer to a null terminated string, putstring will
@@ -53,8 +11,28 @@ botloop2:
     * X2 - Stores the strlength of *X (CString)
     * X3 - Saves LR b/c strlength will change it
     * X4 - Saves X0 b/c strlength will change it
-    ****************************************************************************************/
+****************************************************************************************/
+
+    .data
+    
+    .global putstring      // provide program starting address to linker 
+
+    .text
+
 putstring:
+    // PRESERVE REGISTERS AS PER AAPCS
+    STR     X19, [SP, #-16]!        // PUSH
+    STR     X20, [SP, #-16]!        // PUSH
+    STR     X21, [SP, #-16]!        // PUSH
+    STR     X22, [SP, #-16]!        // PUSH
+    STR     X23, [SP, #-16]!        // PUSH
+    STR     X24, [SP, #-16]!        // PUSH
+    STR     X25, [SP, #-16]!        // PUSH
+    STR     X26, [SP, #-16]!        // PUSH
+    STR     X27, [SP, #-16]!        // PUSH
+    STR     X28, [SP, #-16]!        // PUSH
+    STR     X29, [SP, #-16]!        // PUSH
+    STR     X30, [SP, #-16]!        // PUSH LR
 	//mov	X9, LR		    // Preserve the LR
 	mov	X8, X0		    // X8 = X0
 	bl	strlength	    // X0 = strlength(*X0)
@@ -73,8 +51,20 @@ putstring:
 	mov	X8, #64		    // Linux write system call
 	svc	0		        // Call Linux to output the string
  
- 
-	br	LR		        // Return
+    // POPPED IN REVERSE ORDER (LIFO)
+    LDR     X30, [SP], #16            // POP
+    LDR     X29, [SP], #16            // POP
+    LDR     X28, [SP], #16            // POP
+    LDR     X27, [SP], #16            // POP
+    LDR     X26, [SP], #16            // POP
+    LDR     X25, [SP], #16            // POP
+    LDR     X24, [SP], #16            // POP
+    LDR     X23, [SP], #16            // POP
+    LDR     X22, [SP], #16            // POP
+    LDR     X21, [SP], #16            // POP
+    LDR     X20, [SP], #16            // POP
+    LDR     X19, [SP], #16            // POP
 
-    .end 
-    
+    RET        LR                // Return to caller
+    .end
+      
