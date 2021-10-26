@@ -56,9 +56,9 @@ _start:
     bl      ascint64
     
     // === then store new value into iX =======
-    LDR     X3, =iX          // move address of iX into X3 (X3 = *dbnum1)
-    STR     X0, [X3]         // dereference pointer *iX (address in X3 is now storing value that was in X0)
-    MOV     X5, X0           // Copying comp result (X0) to X5 
+    LDR     X10, =iX          // move address of iX into X3 (X3 = *dbnum1)
+    STR     X0, [X10]         // dereference pointer *iX (address in X3 is now storing value that was in X0)
+    MOV     X12, X0           // Copying comp result (X0) to X5 
 
 // === Prompt user to input Y =============
     LDR     X0, =szPromptY
@@ -75,12 +75,12 @@ _start:
     bl      ascint64
     
     // === then store new value into iX =======
-    LDR     X4, =iY          // move address of iX into X4 (X4 = *dbnum1)
-    STR     X0, [X4]         // dereference pointer *iX (address in X4 is now storing value that was in X0)
-    MOV     X6, X0           // Copying comp result (X0) to X6 
+    LDR     X11, =iY          // move address of iX into X4 (X4 = *dbnum1)
+    STR     X0, [X11]         // dereference pointer *iX (address in X4 is now storing value that was in X0)
+    MOV     X13, X0           // Copying comp result (X0) to X6 
 
 // === Compare x and y ====================
-    CMP     X5, X6
+    CMP     X12, X13
     B.EQ    equal 
     B.LT    less
     B.GT    greater

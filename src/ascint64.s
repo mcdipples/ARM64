@@ -1,4 +1,5 @@
-   /****************************************************************************************
+
+/****************************************************************************************
     * SUBROUTINE ascint64:
     * _______________________________________________________________________________________
     * This method converts a string of characters to an equivalent 8-byte (dword) value.
@@ -16,13 +17,26 @@
     *   X0 - decimal result
     * Registers X0 - X8 are modified and NOT PRESERVED 
     * (DO NOT USE THIS YET.) All registers are preserved except X0 
-    ****************************************************************************************/
-        .data
+****************************************************************************************/    
+    .data
     
-    .global ascint64      // provide program starting address to linker 
+    .global    ascint64        //Provide program starting address to linker
 
     .text
 ascint64:
+    // PRESERVE REGISTERS AS PER AAPCS
+    str X19, [SP, #-16]! // PUSH
+    str X20, [SP, #-16]!
+    str X21, [SP, #-16]!
+    str X22, [SP, #-16]!
+    str X23, [SP, #-16]!
+    str X24, [SP, #-16]!
+    str X25, [SP, #-16]!
+    str X26, [SP, #-16]!
+    str X27, [SP, #-16]!
+    str X28, [SP, #-16]!
+    str X29, [SP, #-16]!
+    str X30, [SP, #-16]! // PUSH LR 
     // === loop =============================
     mov X8, X0          // Preserve X0 since strlength will overwrite it
     mov X9, LR          // Preserve LR before losing it to strlenth 
@@ -41,10 +55,12 @@ ascint64:
 
 topLoop:
     mov X7, #0
-    add X7, X7, X0      // Point to the last digit in *X0 (i.e.: 1's digit)
+    add X7, X7, X0      // Point to the last digit in *X0 (i.e.: 1's digit) 
     add X7, X7, X5      // X7 -> to the end of the cString so we can work backwards (NULL)
     sub X7, X7, #1      
     ldrb W1, [X7], #1   // Indirect addressing X1 = *X0 
+    cmp W1, #'-'        // if char = '-'
+    b.eq negate
 
     sub W1, W1, #0x30   // Subtract the ascii offset of 48
     mul X3, X1, X2      // X3 = x * 10^y and y is stored in X3
@@ -52,10 +68,27 @@ topLoop:
     add X6, X6, X3      // X6 is accumulator 
     mul X2, X2, X4      // result of X4 ^ X2
     sub X5, X5, #1
+
     cmp X5, #0          // Compare X5 == 0 
     beq botLoop         // if (X5 ==0)
     b   topLoop         // jump to botLoop
 
+negate:
+    MVN X6, X6
+    ADD X6, X6, #1
+
 botLoop:
+    ldr X30, [SP], #16  // POP
+    ldr X29, [SP], #16  // POP
+    ldr X28, [SP], #16  // POP
+    ldr X27, [SP], #16  // POP
+    ldr X26, [SP], #16  // POP
+    ldr X25, [SP], #16  // POP
+    ldr X24, [SP], #16  // POP
+    ldr X23, [SP], #16  // POP
+    ldr X22, [SP], #16  // POP
+    ldr X21, [SP], #16  // POP
+    ldr X20, [SP], #16  // POP
+    ldr X19, [SP], #16  // POP
     mov X0, X6          // Store result into X0
     br  LR              // Return
