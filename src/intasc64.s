@@ -14,16 +14,15 @@
     * All 64 bits of each value stored in X19-X29 must be preserved (use push and pop)
 ****************************************************************************************/
    .data
-szTest:     .skip       20    
-    .global _start//intasc64
+   iX:     .quad       0x0DE0B6B3A7640000   // 10 ^ 18 
+    .global intasc64
     .text
-_start:
 intasc64:
-    LDR     X0, =szTest
-    MOV     X1, #0x0DE0             
-    MOVK    X1, #0xB6B3, LSL #16            
-    MOVK    X1, #0xA764, LSL #32              
-    MOVK    X1, #0x0000, LSL #48 
+    //LDR     X0, =szTest
+   // MOV     X1, #0x0DE0             
+   // MOVK    X1, #0xB6B3, LSL #16            
+   // MOVK    X1, #0xA764, LSL #32              
+   // MOVK    X1, #0x0000, LSL #48 
     // PRESERVE REGISTERS AS PER AAPCS
     str X19, [SP, #-16]! // PUSH
     str X20, [SP, #-16]!
@@ -56,10 +55,12 @@ resume:
     // X3 = 10^18 (start from right side)
     // Since 0x0DE0 B6B3 A764 0000 is too large to use #imm16
     // we must load it in parts. 
-    MOV     X3, #0x0DE0             
-    MOVK    X3, #0xB6B3, LSL #16            
-    MOVK    X3, #0xA764, LSL #32              
-    MOVK    X3, #0x0000, LSL #48              
+    LDR     X3, =iX
+    LDR     X3, [X3]        // W3 now holds value within iX
+   // MOV     X3, #0x0DE0             
+  //  MOVK    X3, #0xB6B3, LSL #16            
+  //  MOVK    X3, #0xA764, LSL #32              
+  //  MOVK    X3, #0x0000, LSL #48              
 loop:
   // updates X4's value for the present iteration
     MUL     X4, X4, X6          // shifts X4 over to the left by 1 decimal place depending on value of X4
