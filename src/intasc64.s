@@ -20,11 +20,6 @@
     .text
 
 intasc64:
-    //LDR     X0, =szTest
-   // MOV     X1, #0x0DE0             
-   // MOVK    X1, #0xB6B3, LSL #16            
-   // MOVK    X1, #0xA764, LSL #32              
-   // MOVK    X1, #0x0000, LSL #48 
     // PRESERVE REGISTERS AS PER AAPCS
     str X19, [SP, #-16]! // PUSH
     str X20, [SP, #-16]!
@@ -56,15 +51,10 @@ intasc64:
     b       resume
 resume:
 
-    // X3 = 10^18 (start from right side)
-    // Since 0x0DE0 B6B3 A764 0000 is too large to use #imm16
-    // we must load it in parts. 
+    // X3 = 10^18 (start from right side)wwwwwwwwwwwwwwwwwwwwww. 
     LDR     X3, =iX
     LDR     X3, [X3]        // W3 now holds value within iX
-   // MOV     X3, #0x0DE0             
-  //  MOVK    X3, #0xB6B3, LSL #16            
-  //  MOVK    X3, #0xA764, LSL #32              
-  //  MOVK    X3, #0x0000, LSL #48              
+             
 loop:
     MOV     X2, X1              // X2 = X1 (reset x2 to original value to be used again)
   // updates X4's value for the present iteration
@@ -83,7 +73,6 @@ loop:
                                 // This will be used to truncate leading digits in next loop
     // run 1: DE0 B6B3 A764 0000 / A = 163 4578 5D8A 0000 (10^17)
     // run 2: 163 4578 5D8A 0000 / A = 23 86F2 6FC1 0000 (10^16)
-    SDIV    X3, X3, X6         // X3 /= 10 
 
     // IF (X5 != 0 || X2 > 0 || X3 == 10^0)
     CMP     X5, #0
@@ -100,8 +89,9 @@ store:
     ADD     X2, X2, #'0'        // X2 += ASCII value of 0 (0x30)
     STRB    W2, [X0], #1        // store value of X2 into position pointed to by X0
                                 // increment by 1 
-    CMP     X3, #1              // IF X3 == 10^0, exit loop
+    CMP     X3, #1              // IF X3 < 10^0, exit loop
     B.EQ    endloop
+    SDIV    X3, X3, X6         // X3 /= 10 
     B       loop                // else loop
 
 endloop:
