@@ -125,7 +125,7 @@ _start:
 
     LDR X0, =szresult   // string memory that will hold result in hex (4104fc)
     MOV X1, X18         // X1 = result
-    bl hex64asc         // bl - store next LOC to link register and branch
+    bl intasc64         // bl - store next LOC to link register and branch
 
 // === OUTPUT EQUATION =======================
 

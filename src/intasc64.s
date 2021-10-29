@@ -73,6 +73,7 @@ loop:
                                 // This will be used to truncate leading digits in next loop
     // run 1: DE0 B6B3 A764 0000 / A = 163 4578 5D8A 0000 (10^17)
     // run 2: 163 4578 5D8A 0000 / A = 23 86F2 6FC1 0000 (10^16)
+    SDIV    X3, X3, X6         // X3 /= 10 
 
     // IF (X5 != 0 || X2 > 0 || X3 == 10^0)
     CMP     X5, #0
@@ -89,9 +90,8 @@ store:
     ADD     X2, X2, #'0'        // X2 += ASCII value of 0 (0x30)
     STRB    W2, [X0], #1        // store value of X2 into position pointed to by X0
                                 // increment by 1 
-    CMP     X3, #1              // IF X3 < 10^0, exit loop
+    CMP     X3, #0              // IF X3 < 10^0, exit loop
     B.EQ    endloop
-    SDIV    X3, X3, X6         // X3 /= 10 
     B       loop                // else loop
 
 endloop:
