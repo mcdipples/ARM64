@@ -28,15 +28,15 @@ strlength:
     STR     X30, [SP, #-16]!        // PUSH LR
     
     // We need a do while
-    mov     X7, X0            //point to first digit (leftmost) of CString
+    mov        X7, X0            //point to first digit (leftmost) of CString
     mov        X2, #0            //Counter
     
 topLoop:
-    ldrb    W1, [X7],#1        //indirect addressing X1 = *X0
+    ldrb       W1, [X7],#1        //indirect addressing X1 = *X0
     cmp        W1, #0            //if (W1 == NULL CHARACTER)
     beq        botLoop            //    jump to bottom of subroutine
     add        X2, X2, #1        // increment the counter
-    b        topLoop
+    b          topLoop
 
 botLoop:
     mov        X0, X2            //X0 = Length of the CString

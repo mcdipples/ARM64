@@ -1,0 +1,23 @@
+learning about thhe CPSR register, print decimal numbers, and RASM-2 
+    - modifying intasc64 (hex) to output decimal numbers 
+        a. pseudo:
+
+                ** basically ascint64 but backwards ** 
+
+                decimal is 0 to 9. decimal 0 in ascii is 0x30(ascii) or 48(ascii)
+                use as an offset to go through num 0-9(decimal) 
+                12 in hex is 18 decimal. 
+
+                FF is largest number we can deal with.
+                - 12(x16) / A = 1 R8. store 1, add 1 to ascii number for character
+                - subracting from x - (base10num)*y 
+                - need to start on the largest end, limiting factor is signed numbers. 
+                - largest num we can have is 64 bits. first is either 0 or 1, and we have
+                  the other 63 bits to work with. if negative .. 
+
+                  R0 holds value to be converted
+                  R1 points to address for string to be stored
+                  LR: contains return address. 
+lab 14:
+
+    in CPSR: leftmost byte is the 4 bits we will be reading 

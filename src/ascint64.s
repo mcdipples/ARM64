@@ -14,7 +14,8 @@
     * LR: Contains the return address
     * _______________________________________________________________________________________
     * Returned register contents:
-    *   X0 - decimal result
+    *   X0 - numerical result
+    * _______________________________________________________________________________________
     * Registers X0 - X8 are modified and NOT PRESERVED 
     * (DO NOT USE THIS YET.) All registers are preserved except X0 
 ****************************************************************************************/    
@@ -90,5 +91,6 @@ botLoop:
     ldr X21, [SP], #16  // POP
     ldr X20, [SP], #16  // POP
     ldr X19, [SP], #16  // POP
+
     mov X0, X6          // Store result into X0
     br  LR              // Return

@@ -1,0 +1,61 @@
+
+1) Determine if the number we are given is negative
+    a) if the number is negative insert a sign bit and convert the given number into a positive number for easier conversions
+
+2) isolate each digit within the number by means of division by 10^n, where n is the given decimal place from left to right
+
+3) add that digit to the ascii value of '0' to convert it into a proper ascii character
+
+4) insert that character into its proper character position (avoiding overwriting the '-' character we may have inserted earlier)
+
+5) Repeat steps 2-4 until we convert the last number at position 10^0 (start at 10^18)
+
+6) truncate the zeros by some means, either within the previously described loop or after it without erasing the '-' 
+   character that may or may not be there
+
+XN = <number we wish to convert into a string>
+XY -> <memory address of string to hold the converted number>
+
+// check to see if XN stores a negative number
+if (XN < 0)
+{
+  XN = 0 - XN
+  STR '-', [XY]
+  XY++
+}
+
+XB = 0 // <- keeps track of previously accumulated values to subtract
+XC = 0  // <- this will act as our flag to determine whether we should insert characters into the string or not,
+        //  As long as XC is 0 we have yet to come across a non-zero character to insert
+for (XI = 10^18; XI > 0; XI =/ 10)
+{
+  // updates XB's value for the present iteration
+  XB *= 10  // <- shifts XB over to the left by 1 decimal place
+
+  // Isolate a specific digit at 10^N
+  XA = XN    // <- preserves XN in XA
+  XA /= XI  // <- divides XA by 10^N
+  XA -= XB  // <- removes any leading digits from XA's value to focus on exclusively one digit
+  
+  XB += XA  // <- adds XA's isolated value to the 'leftovers' register that will be used to cut off any leading digits
+            //  in the next iteration
+  
+  // Check to see if we should even insert a digit to begin with
+  if (XC != 0 || XA > 0 || XI == 10^0)
+  {
+    XC = 1  // <- whenever we are first able to enter this block of code, it means we have either found our first 
+            //  non-zero character, or we have reached the 10^0th place and must insert whatever digit is there 
+            // into the string
+    XA += '0'  // <- adds XA's isolated digit to the ascii value of '0'
+    STRB XA, [XY]  // <- store XA's value within the position pointed to by XY
+    XY++  // <- adjusts XY by 1
+  }
+}
+
+TO GET A REMAINDER:
+
+// input: x0=dividend, x1=divisor
+udiv x2, x0, x1
+msub x3, x2, x1, x0
+// result: x2=quotient, x3=remainder
+

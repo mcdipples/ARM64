@@ -1,0 +1,8 @@
+// build your object files
+// trace the beginning to the end of the program on the worksheet provided
+// LR = x30 
+// change string to "cat\n"
+// x/16b $sp // i r $sp. $lr, $pc 
+// in excel - to get 00 you have to type '00
+// past line 28, it's only going to change the program counter
+// use his stack pointer value 0x7ffffff4d0

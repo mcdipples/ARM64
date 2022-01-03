@@ -1,0 +1,31 @@
+
+** How to use the makefile provided by Joshua S. **
+=============================================================================
+steps:
+
+1. for each assembly file EXCEPT the entry point:
+
+  a. invoke `as` (herein `$As`)on each, 
+     outputting a correspondingly named `.o` in the build directory (herein `$(BUILD_DIR)`.
+
+2. invoke `ar` (herein `$(AR)`) `$(AR) rvs $(OBJECTS) -o $(BUILD_DIR)/libproject.a` 
+   for all object files in step one, producing a .a in the same build directory.
+
+3. assemble main entry point.
+
+4. link everything together with `ld`, herein `$(LD)`:
+make
+$(LD) $(LD_ARGS)  $(BUILD_DIR)/main.o -o $@  -L ./build -lproject
+
+=============================================================================
+Prerequisites:
+
+define / as project root.
+define  = /obj/ as object build dir
+define$(LIB_DIR)  = /lib/ for library build dir.
+
+$(AR) $(AR_ARGS) -o $(LIB_DIR)/$(PROJECT_LIB) $(OBJS_paths)
+
+
+*message link with image of an example 
+https://discord.com/channels/879246693139378236/879246693139378239/899735723173871636
